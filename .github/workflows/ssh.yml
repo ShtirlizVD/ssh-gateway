@@ -9,6 +9,8 @@ jobs:
 
     steps:
 
+    - uses: actions/checkout@v4
+
     - name: show ip
       run: |
         echo "Public IP:"
@@ -19,14 +21,12 @@ jobs:
         sudo apt update
         sudo apt install -y openssh-server
 
-    - name: enable root login
+    - name: start ssh
       run: |
         sudo mkdir /var/run/sshd
         sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
         echo "root:root" | sudo chpasswd
         sudo service ssh start
 
-    - name: keep runner alive
-      run: |
-        echo "Server ready"
-        sleep 6h
+    - name: keep alive
+      run: sleep 6h
