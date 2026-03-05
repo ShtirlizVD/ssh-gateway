@@ -4,29 +4,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  gateway:
+  debug:
     runs-on: ubuntu-latest
 
     steps:
 
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-    - name: show ip
-      run: |
-        echo "Public IP:"
-        curl ifconfig.me
-
-    - name: install ssh
-      run: |
-        sudo apt update
-        sudo apt install -y openssh-server
-
-    - name: start ssh
-      run: |
-        sudo mkdir /var/run/sshd
-        sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-        echo "root:root" | sudo chpasswd
-        sudo service ssh start
-
-    - name: keep alive
-      run: sleep 6h
+    - name: Start tmate session
+      uses: mxschmitt/action-tmate@v3
