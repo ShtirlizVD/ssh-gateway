@@ -1,0 +1,32 @@
+name: SSH Gateway
+
+on:
+  workflow_dispatch:
+
+jobs:
+  gateway:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: show ip
+      run: |
+        echo "Public IP:"
+        curl ifconfig.me
+
+    - name: install ssh
+      run: |
+        sudo apt update
+        sudo apt install -y openssh-server
+
+    - name: enable root login
+      run: |
+        sudo mkdir /var/run/sshd
+        sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+        echo "root:root" | sudo chpasswd
+        sudo service ssh start
+
+    - name: keep runner alive
+      run: |
+        echo "Server ready"
+        sleep 6h
